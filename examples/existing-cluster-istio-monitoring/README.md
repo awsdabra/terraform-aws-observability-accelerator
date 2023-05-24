@@ -110,24 +110,59 @@ terraform apply
 
 Open your Grafana workspace and under Configuration -> Data sources, you should see `aws-observability-accelerator`. Open and click `Save & test`. You should see a notification confirming that the Amazon Managed Service for Prometheus workspace is ready to be used on Grafana.
 
+For Default Region, choose the region where the Amazon Managed Service for Prometheus workspace exists. 
+
+
+![3297CF9F-47B6-4572-A331-9B8C9CCDDD72](https://user-images.githubusercontent.com/47993564/236845936-168eac88-74cc-43be-85af-95e9c1b495ef.jpeg)
+
+Select the Save and test button. You will see data source working.
+
+
+![C96E9C99-FBC9-455B-8DFB-1F11598FCE2D](https://user-images.githubusercontent.com/47993564/236845978-289ed5ee-dcbd-4f8e-a2ab-dbb43b586b1a.jpeg)
+
 2. Grafana dashboards
 
 Go to the Dashboards panel of your Grafana workspace. You should see a list of dashboards under the `Observability Accelerator Dashboards`
 
-<img width="1540" alt="image" src="https://user-images.githubusercontent.com/10175027/190000716-29e16698-7c90-49d6-8c37-79ca1790e2cc.png">
 
-Open a specific dashboard and you should be able to view its visualization
+![8184A2F7-C9BD-4F96-BA1C-2D11E951C287](https://user-images.githubusercontent.com/47993564/236841811-fdd5a07c-6e5e-4654-a735-80f92f5bee56.jpeg)
 
-<img width="1721" alt="Screenshot 2022-08-30 at 20 01 32" src="https://user-images.githubusercontent.com/10175027/187515925-67864dd1-2b35-4be0-a15e-1e36805e8b29.png">
 
-2. Amazon Managed Service for Prometheus rules and alerts
+Open a specific dashboard and you should be able to view its visualization. Example below is for the Istio Control Plane Dashboard with data for the last hour. 
+
+![68AC86D7-4959-4527-A723-A19E8FD9E8F5](https://user-images.githubusercontent.com/47993564/236842708-72225322-4f97-44cc-aac0-40a3356e50c6.jpeg)
+
+
+3. Amazon Managed Service for Prometheus rules and alerts
 
 Open the Amazon Managed Service for Prometheus console and view the details of your workspace. Under the `Rules management` tab, you should find new rules deployed.
 
-<img width="1629" alt="image" src="https://user-images.githubusercontent.com/10175027/189301297-4865e75d-2d71-434f-b5d0-9750b3533632.png">
+![E621F573-2D6E-42A0-A997-5941BDBCB3FA](https://user-images.githubusercontent.com/47993564/236844084-80c754e3-4fe1-45bb-8361-181432675469.jpeg)
+
 
 
 To setup your alert receiver, with Amazon SNS, follow [this documentation](https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-receiver.html)
+
+
+
+4. Query Istio metrics
+
+Now import the Grafana dashboards to enable visualizing metrics from the Istio environment. Go to the plus sign on the left navigation bar, and select Import, as shown in the following image.
+
+Type 7639 (Istio Mesh Dashboard) in the Import via grafana.com textbox in the Import screen and select Load. Select the Prometheus data source in the dropdown at the bottom and choose Import. Once complete, you will be able to see the Grafana dashboard showing metrics from the Istio through the Prometheus data source.
+
+You should edit the underlying PromQL queries in the dashboard JSON from [1m] to [5m] if the dashboard panel is empty for the Global Request Volume and HTTP workloads panels. Additional Grafana dashboards for Istio components are available at grafana.com.
+More Istio metrics
+
+5. Segmenting by service and service version, these are a few metrics that you usually want to monitor coming from the Istio Prometheus telemetry:
+
+    Number of requests: istio_request_count
+    Request duration: istio_request_duration_milliseconds_bucket by source and destination
+    Request size: istio_request_bytes_bucket by source and destination
+
+You can also create your custom dashboard using PromQL (Prometheus Query Language) by creating a custom dashboard. Then add a panel connecting Amazon Managed service for Prometheus as the data source.
+Setting up alerts with Amazon Managed Grafana and PagerDuty for Istio HA
+
 
 ## Advanced configuration
 
